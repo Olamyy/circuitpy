@@ -1,3 +1,4 @@
+# coding=utf-8
 import turtle
 from core.errors import InvalidAngleError, InvalidShapeError
 
@@ -30,7 +31,7 @@ class DrawerScreen(turtle.TurtleScreen):
         self.screensize(canvheight=10, canvwidth=20)
 
     def set_defaulthome(self, lowerX, lowerY, upperX, upperY):
-        """"
+        """
         Set up user-defined coordinate system and switch to mode “world” if necessary. This performs a screen.reset(). If mode “world” is already active, all drawings are redrawn according to the new coordinates.
 
         ATTENTION: in user-defined coordinate systems angles may appear distorted.
@@ -59,7 +60,7 @@ class DrawerScreen(turtle.TurtleScreen):
         """
         self.bgcolor(color)
 
-    def window_size(self, width,height):
+    def window_size(self, width, height):
         self.setup()
 
     def set_bgpic(self, picture):
@@ -81,15 +82,21 @@ class Drawer(DrawerSettings, DrawerScreen):
     def arrow(self):
         pass
 
-    def line(self, length, direction):
+    def line(self, length, angle=None, thickness=None, line_color=None):
         """
+        :param thickness:
+        :param line_color:
         :param length:
-        :param direction:
+        :param direction: If direction is none, then  the direction is the current heading being faced by turtle
         :param angle:
         :return:
         """
-        self.setheading(direction)
-        self.forward(length)
+        if not angle or thickness or line_color:
+            self.forward(length)
+        self.pencolor(line_color)
+        self.pensize(thickness)
+        self.setheading(angle)
+        # self.forward(length)
 
     def turn(self, angle):
         """
@@ -102,12 +109,10 @@ class Drawer(DrawerSettings, DrawerScreen):
         self.circle(radius)
 
     def semi_circle(self, radius):
+        self.turn(-45)
+        self.circle(radius, extent=90)
         self.left(90)
-        for x in range(180):
-            self.forward(1)
-            self.right(1)
-        self.right(90)
         self.forward(radius)
 
-
-
+    def keep_window(self):
+        turtle.mainloop()
