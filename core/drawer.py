@@ -22,8 +22,19 @@ class DrawerSettings(turtle.Turtle):
     def window_size(self, width, height, startx, starty):
         self._screen.setup(width, height, startx, starty)
 
+    def set_default_angle(self, angle=None):
+        return self.degrees(angle)
 
-class DrawerScreen(turtle.TurtleScreen):
+    def set_in_radians(self):
+        """
+        Set the angle measurement units to radians. Equivalent to degrees(2*math.pi).
+        :param angle:
+        :return:
+        """
+        return self.radians()
+
+
+class DrawerScreen(turtle.Screen):
     def __init__(self, cv):
         super(DrawerScreen, self).__init__(cv)
 
@@ -63,7 +74,7 @@ class DrawerScreen(turtle.TurtleScreen):
     def window_size(self, width, height):
         self.setup()
 
-    def set_bgpic(self, picture):
+    def set_background_image(self, picture):
         """
 
         :param picture:
@@ -74,8 +85,39 @@ class DrawerScreen(turtle.TurtleScreen):
     def clear_screen(self):
         self.clearscreen()
 
+    def make_reset(self):
+        self.resetscreen()
 
-class Drawer(DrawerSettings, DrawerScreen):
+
+class DrawerState(DrawerSettings):
+    def __init__(self):
+        super(DrawerState, self).__init__()
+
+    def get_position(self):
+        return self.position
+
+    def get_angle_between(self, x, y):
+        return self.towards(x, y)
+
+    def get_x_position(self):
+        return self.xcor()
+
+    def get_y_position(self):
+        return self.ycor()
+
+    def get_heading_angle(self):
+        """
+        Return the turtle’s current heading (value depends on the turtle mode, see mode()).
+        :return:
+        """
+        return self.heading()
+
+    def distance_between(self, x, y=None):
+        if not y: y = 0
+        return self.distance(x, y)
+
+
+class Drawer(DrawerSettings, DrawerScreen, DrawerState):
     def __init__(self, **kwargs):
         super(Drawer, self).__init__()
 
@@ -116,3 +158,7 @@ class Drawer(DrawerSettings, DrawerScreen):
 
     def keep_window(self):
         turtle.mainloop()
+
+
+
+
